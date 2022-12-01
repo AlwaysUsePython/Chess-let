@@ -9,6 +9,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+*.xml
+*.pyc
 
 # External tool builders
 .externalToolBuilders/
