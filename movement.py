@@ -215,12 +215,36 @@ def getRookMap(board, row, col):
 def getKnightMap(board, row, col):
     map = ["I"] * 64
 
+    possibleSquares = [(row-2)*8 + col + 1, (row-2)*8 + col - 1, (row+2)*8 + col + 1, (row+2)*8 + col - 1, (row+1)*8+col+2, (row+1)*8+col-2, (row-1)*8+col+2, (row-1)*8+col-2]
+
+    updatedPossibleSquares = []
+    for square in possibleSquares:
+
+        if square >= 0 and square <= 63:
+            if abs(square % 8 - col) <= 2:
+                updatedPossibleSquares.append(square)
+
+    possibleSquares = updatedPossibleSquares
+
+
     # check the color of the piece
     if board[row * 8 + col] != board[row * 8 + col].lower():
-        pass
+
+        for square in possibleSquares:
+            if board[square] in "rnbqkp_":
+                if board[square] == "_":
+                    map[square] = "L"
+                else:
+                    map[square] = "T"
 
     else:
-        pass
+
+        for square in possibleSquares:
+            if board[square] in "RNBQKP_":
+                if board[square] == "_":
+                    map[square] = "L"
+                else:
+                    map[square] = "T"
 
     return "".join(map)
 
