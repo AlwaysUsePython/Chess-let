@@ -151,8 +151,52 @@ def drawBackground(screen):
             else:
                 pygame.draw.rect(screen, blackSquareColor, pygame.Rect(row*80, col*80, 80, 80))
 
+## DRAW HIGHLIGHTS ##
+def drawHighlights(highlights, screen):
+    darkLegalMoveColor = (106, 111, 65)
+    lightLegalMoveColor = (135, 151, 107)
+
+    squareCounter = 0
+    for square in highlights:
+        col = squareCounter % 8
+        row = squareCounter // 8
+
+        if square == "G":
+            if (row + col) % 2 == 0:
+                pygame.draw.rect(screen, lightLegalMoveColor, pygame.Rect(col*80, row*80, 80, 80))
+            else:
+                pygame.draw.rect(screen, darkLegalMoveColor, pygame.Rect(col*80, row*80, 80, 80))
+
+        squareCounter += 1
+
+## DRAWS LEGAL MOVES ##
+def drawLegalMoves(legalMoves, screen):
+
+    darkLegalMoveColor = (106,111,65)
+    lightLegalMoveColor = (135,151,107)
+
+    squareCounter = 0
+    for square in legalMoves:
+        col = squareCounter % 8
+        row = squareCounter // 8
+
+        if square == "L":
+            if (row + col) % 2 == 0:
+                pygame.draw.circle(screen, lightLegalMoveColor, (col*80+40, row*80+40), 10)
+            else:
+                pygame.draw.circle(screen, darkLegalMoveColor, (col*80+40, row*80+40), 10)
+
+        elif square == "T":
+            if (row + col) % 2 == 0:
+                pygame.draw.circle(screen, lightLegalMoveColor, (col*80+40, row*80+40), 40, 5)
+            else:
+                pygame.draw.circle(screen, darkLegalMoveColor, (col*80+40, row*80+40), 40, 5)
+        squareCounter += 1
+
 ## DRAW EVERYTHING ##
-def drawBoard(board, screen):
+def drawBoard(board, legalMoves, screen, highlights = "_"*64):
     drawBackground(screen)
+    drawHighlights(highlights, screen)
     drawSquareNames(screen)
     drawPieces(board, screen)
+    drawLegalMoves(legalMoves, screen)
