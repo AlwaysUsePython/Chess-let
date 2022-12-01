@@ -6,13 +6,14 @@ graphics.setup()
 
 running = True
 
-board = "rnbqkbnrpppppppp______________________________p_PPPPPPPPRNBQKBNR"
+board = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR"
 
 screen = pygame.display.set_mode((1000, 640))
 
 legalMoves = "I"*64
 
 highlights = "_"*64
+selected = False
 
 while running:
 
@@ -31,15 +32,26 @@ while running:
                 row = pos[1] // 80
                 col = pos[0] // 80
 
-                legalMoves = movement.getLegalMoves(board, row, col)
+                if not selected:
+                    legalMoves = movement.getLegalMoves(board, row, col)
 
-                if board[row*8+col] != "_":
-                    highlights = ["_"]*64
-                    highlights[row*8+col] = "G"
-                    highlights = "".join(highlights)
+                    if board[row*8+col] != "_":
+                        highlights = ["_"]*64
+                        highlights[row*8+col] = "G"
+                        highlights = "".join(highlights)
+                        selected = True
 
-                else:
+                    else:
+                        highlights = "_"*64
+
+                elif selected:
+                    if legalMoves[row*8+col] != "I":
+                        board = movement.makeMove(board, highlights.index("G"), row*8+col)
+
                     highlights = "_"*64
+                    legalMoves = "I"*64
+                    selected = False
+
 
     graphics.drawBoard(board, legalMoves, screen, highlights)
     pygame.display.update()

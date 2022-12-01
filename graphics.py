@@ -63,22 +63,26 @@ def setup():
 
 ## DRAW SQUARE COORDINATES ##
 def drawSquareNames(screen):
+
+    blackSquareColor = (181,136,99)
+    whiteSquareColor = (240,217,182)
+
     font = pygame.font.Font("freesansbold.ttf", 10)
 
     for i in range(8, 0, -1):
         if i % 2 == 0:
-            text = font.render(str(i), True, (76,116,156))
+            text = font.render(str(i), True, blackSquareColor)
         else:
-            text = font.render(str(i), True, (236,236,212))
+            text = font.render(str(i), True, whiteSquareColor)
         rect = text.get_rect()
         rect.center = (5, 80*(8-i) + 5)
         screen.blit(text, rect)
     letters = "abcdefgh"
     for i in range(8):
         if i % 2 == 1:
-            text = font.render(letters[i], True, (76, 116, 156))
+            text = font.render(letters[i], True, blackSquareColor)
         else:
-            text = font.render(letters[i], True, (236, 236, 212))
+            text = font.render(letters[i], True, whiteSquareColor)
         rect = text.get_rect()
         rect.center = (80*i + 75, 635)
         screen.blit(text, rect)
