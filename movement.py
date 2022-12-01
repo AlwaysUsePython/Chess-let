@@ -10,6 +10,26 @@ def makeMove(board, loc1, loc2):
     arrBoard[loc2] = board[loc1]
     arrBoard[loc1] = "_"
 
+    # White short castle
+    if board[loc1] == "K" and loc2 == 62:
+        arrBoard[61] = "R"
+        arrBoard[63] = "_"
+
+    # White long castle
+    if board[loc1] == "K" and loc2 == 58:
+        arrBoard[59] = "R"
+        arrBoard[56] = "_"
+
+    # Black short castle
+    if board[loc1] == "k" and loc2 == 6:
+        arrBoard[5] = "r"
+        arrBoard[7] = "_"
+
+    # Black long castle
+    if board[loc1] == "k" and loc2 == 2:
+        arrBoard[3] = "r"
+        arrBoard[0] = "_"
+
     return "".join(arrBoard)
 
 ## RETURNS BOOLEAN OF WHETHER OR NOT THE KING IS IN CHECK ##
@@ -64,8 +84,48 @@ def getLegalMoves(board, row, col):
             if isInCheck(color, testBoard):
                 testMap[m] = "I"
 
-    return "".join(testMap)
+            if board[row*8+col] == "K":
+                # white short castle
+                if col == 4 and m == 62:
+                    if isInCheck("white", board):
+                        testMap[m] = "I"
+                    else:
+                        testBoard2 = makeMove(board, row*8+col, 61)
+                        if isInCheck("white", testBoard2):
+                            testMap[m] = "I"
 
+            if board[row*8+col] == "K":
+                # white long castle
+                if col == 4 and m == 58:
+                    if isInCheck("white", board):
+                        testMap[m] = "I"
+                    else:
+                        testBoard2 = makeMove(board, row*8+col, 59)
+                        if isInCheck("white", testBoard2):
+                            testMap[m] = "I"
+
+            if board[row*8+col] == "k":
+                # black short castle
+                if col == 4 and m == 6:
+                    if isInCheck("black", board):
+                        testMap[m] = "I"
+                    else:
+                        testBoard2 = makeMove(board, row*8+col, 5)
+                        if isInCheck("black", testBoard2):
+                            testMap[m] = "I"
+
+            if board[row*8+col] == "k":
+                # black long castle
+                if col == 4 and m == 2:
+                    if isInCheck("black", board):
+                        testMap[m] = "I"
+                    else:
+                        testBoard2 = makeMove(board, row*8+col, 3)
+                        if isInCheck("black", testBoard2):
+                            testMap[m] = "I"
+
+
+    return "".join(testMap)
 
 def getLegalMovesIgnoreCheck(board, row, col):
 
@@ -457,6 +517,12 @@ def getKingMap(board, row, col):
                 else:
                     map[square] = "T"
 
+        if row == 7 and col == 4 and board[61] == "_" and board[62] == "_" and board[63] == "R":
+            map[62] = "L"
+
+        if row == 7 and col == 4 and board[59] == "_" and board[58] == "_" and board[57] == "_" and board[56] == "R":
+            map[58] = "L"
+
     else:
 
         for square in possibleSquares:
@@ -465,6 +531,12 @@ def getKingMap(board, row, col):
                     map[square] = "L"
                 else:
                     map[square] = "T"
+
+        if row == 0 and col == 4 and board[5] == "_" and board[6] == "_" and board[7] == "r":
+            map[5] = "L"
+
+        if row == 0 and col == 4 and board[3] == "_" and board[2] == "_" and board[1] == "_" and board[0] == "r":
+            map[2] = "L"
 
     return "".join(map)
 
