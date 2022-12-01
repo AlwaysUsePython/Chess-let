@@ -12,10 +12,62 @@ def makeMove(board, loc1, loc2):
 
     return "".join(arrBoard)
 
+## RETURNS BOOLEAN OF WHETHER OR NOT THE KING IS IN CHECK ##
+def isInCheck(color, board):
+
+    kingSquare = getKingSquare(color, board)
+
+    for i in range(len(board)):
+        if color == "white":
+            if board[i] in "rnbkqp":
+                map = getLegalMovesIgnoreCheck(board, i//8, i%8)
+                if map[kingSquare] == "T":
+                    return True
+        else:
+            if board[i] in "RNBKQP":
+                map = getLegalMovesIgnoreCheck(board, i//8, i%8)
+                if map[kingSquare] == "T":
+                    return True
+
+    return False
+
+## RETURNS THE SQUARE OF THAT KING (SINGLE COORDINATE) ##
+def getKingSquare(color, board):
+    for i in range(len(board)):
+        if color == "white":
+            if board[i] == "K":
+                return i
+
+        else:
+            if board[i] == "k":
+                return i
+
 ## INPUT OF BOARD + COORDINATES, OUTPUT OF STRING WITH MAP OF LEGAL MOVES ##
 # Map Format: "L" is legal, "I" is illegal
 # Note: Passes calculation off to helper methods for each piece
 def getLegalMoves(board, row, col):
+
+    if board[row*8+col] in "RNBKQP":
+        color = "white"
+    else:
+        color = "black"
+
+    initialMap = getLegalMovesIgnoreCheck(board, row, col)
+
+    testMap = []
+    for item in initialMap:
+        testMap.append(item)
+
+    for m in range(len(testMap)):
+        if initialMap[m] != "I":
+            testBoard = makeMove(board, row*8+col, m)
+            if isInCheck(color, testBoard):
+                testMap[m] = "I"
+
+    return "".join(testMap)
+
+
+def getLegalMovesIgnoreCheck(board, row, col):
 
     # if it isn't a piece, return all illegal
     if board[row*8+col] == "_":
@@ -42,7 +94,6 @@ def getLegalMoves(board, row, col):
         initialMap = getQueenMap(board, row, col)
 
     return initialMap
-
 
 def getPawnMap(board, row, col):
     map = ["I"]*64

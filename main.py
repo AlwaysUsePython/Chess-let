@@ -14,6 +14,7 @@ legalMoves = "I"*64
 
 highlights = "_"*64
 selected = False
+move = "white"
 
 while running:
 
@@ -33,9 +34,14 @@ while running:
                 col = pos[0] // 80
 
                 if not selected:
-                    legalMoves = movement.getLegalMoves(board, row, col)
 
-                    if board[row*8+col] != "_":
+                    if move == "black":
+                        goodPieces = "rnbqkp"
+                    else:
+                        goodPieces = "RNBQKP"
+
+                    if board[row*8+col] in goodPieces:
+                        legalMoves = movement.getLegalMoves(board, row, col)
                         highlights = ["_"]*64
                         highlights[row*8+col] = "G"
                         highlights = "".join(highlights)
@@ -43,15 +49,20 @@ while running:
 
                     else:
                         highlights = "_"*64
+                        legalMoves = "I"*64
 
                 elif selected:
                     if legalMoves[row*8+col] != "I":
                         board = movement.makeMove(board, highlights.index("G"), row*8+col)
+                        if move == "white":
+                            move = "black"
+                        else:
+                            move = "white"
 
                     highlights = "_"*64
                     legalMoves = "I"*64
                     selected = False
 
 
-    graphics.drawBoard(board, legalMoves, screen, highlights)
+    graphics.drawBoard(board, legalMoves, screen, move, highlights)
     pygame.display.update()

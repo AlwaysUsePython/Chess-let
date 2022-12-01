@@ -1,4 +1,5 @@
 import pygame
+import movement
 
 ####### Chess board notation: #######
 # White Pieces: RNBQKP
@@ -160,6 +161,7 @@ def drawHighlights(highlights, screen):
     darkLegalMoveColor = (106, 111, 65)
     lightLegalMoveColor = (135, 151, 107)
 
+
     squareCounter = 0
     for square in highlights:
         col = squareCounter % 8
@@ -172,6 +174,15 @@ def drawHighlights(highlights, screen):
                 pygame.draw.rect(screen, darkLegalMoveColor, pygame.Rect(col*80, row*80, 80, 80))
 
         squareCounter += 1
+
+## DRAW CHECKS ##
+def drawChecks(board, color, screen):
+    red = (255, 150, 150)
+
+    kingSquare = movement.getKingSquare(color, board)
+
+    if movement.isInCheck(color, board):
+        pygame.draw.circle(screen, red, (kingSquare%8 * 80 + 40, kingSquare//8 * 80 + 40), 40)
 
 ## DRAWS LEGAL MOVES ##
 def drawLegalMoves(legalMoves, screen):
@@ -198,9 +209,10 @@ def drawLegalMoves(legalMoves, screen):
         squareCounter += 1
 
 ## DRAW EVERYTHING ##
-def drawBoard(board, legalMoves, screen, highlights = "_"*64):
+def drawBoard(board, legalMoves, screen, turn, highlights = "_"*64):
     drawBackground(screen)
     drawHighlights(highlights, screen)
+    drawChecks(board, turn, screen)
     drawSquareNames(screen)
     drawPieces(board, screen)
     drawLegalMoves(legalMoves, screen)
