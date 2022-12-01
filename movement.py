@@ -253,33 +253,182 @@ def getBishopMap(board, row, col):
 
     # check the color of the piece
     if board[row * 8 + col] != board[row * 8 + col].lower():
-        pass
+        # NE
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row - counter + 1) > 0 and (col+counter-1) < 7 and board[(row - counter) * 8 + col+counter] in "rnbqkp_":
+                if board[(row - counter) * 8 + col+counter] == "_":
+                    map[(row - counter) * 8 + col+counter] = "L"
+                else:
+                    map[(row - counter) * 8 + col+counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # NW
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row - counter + 1) > 0 and (col - counter + 1) > 0 and board[
+                (row - counter) * 8 + col - counter] in "rnbqkp_":
+                if board[(row - counter) * 8 + col - counter] == "_":
+                    map[(row - counter) * 8 + col - counter] = "L"
+                else:
+                    map[(row - counter) * 8 + col - counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # SE
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row + counter - 1) < 7 and (col + counter - 1) < 7 and board[(row + counter) * 8 + col + counter] in "rnbqkp_":
+                if board[(row + counter) * 8 + col + counter] == "_":
+                    map[(row + counter) * 8 + col + counter] = "L"
+                else:
+                    map[(row + counter) * 8 + col + counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # SW
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row + counter - 1) < 7 and (col - counter + 1) > 0 and board[(row + counter) * 8 + col - counter] in "rnbqkp_":
+                if board[(row + counter) * 8 + col - counter] == "_":
+                    map[(row + counter) * 8 + col - counter] = "L"
+                else:
+                    map[(row + counter) * 8 + col - counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
 
     else:
-        pass
+        # NE
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row - counter + 1) > 0 and (col + counter - 1) < 7 and board[
+                (row - counter) * 8 + col + counter] in "RNBQKP_":
+                if board[(row - counter) * 8 + col + counter] == "_":
+                    map[(row - counter) * 8 + col + counter] = "L"
+                else:
+                    map[(row - counter) * 8 + col + counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # NW
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row - counter + 1) > 0 and (col - counter + 1) > 0 and board[
+                (row - counter) * 8 + col - counter] in "RNBQKP_":
+                if board[(row - counter) * 8 + col - counter] == "_":
+                    map[(row - counter) * 8 + col - counter] = "L"
+                else:
+                    map[(row - counter) * 8 + col - counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # SE
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row + counter - 1) < 7 and (col + counter - 1) < 7 and board[
+                (row + counter) * 8 + col + counter] in "RNBQKP_":
+                if board[(row + counter) * 8 + col + counter] == "_":
+                    map[(row + counter) * 8 + col + counter] = "L"
+                else:
+                    map[(row + counter) * 8 + col + counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
+
+        # SW
+        blocked = False
+        counter = 1
+        while not blocked:
+            if (row + counter - 1) < 7 and (col - counter + 1) > 0 and board[
+                (row + counter) * 8 + col - counter] in "RNBQKP_":
+                if board[(row + counter) * 8 + col - counter] == "_":
+                    map[(row + counter) * 8 + col - counter] = "L"
+                else:
+                    map[(row + counter) * 8 + col - counter] = "T"
+                    blocked = True
+
+                counter += 1
+            else:
+                blocked = True
 
     return "".join(map)
 
 def getKingMap(board, row, col):
     map = ["I"] * 64
 
+    possibleSquares = [row*8+col+1, row*8+col-1, (row-1)*8+col, (row+1)*8+col, (row+1)*8+col+1, (row-1)*8+col-1, (row-1)*8+col+1, (row+1)*8+col-1]
+
+    updatedPossibleSquares = []
+    for square in possibleSquares:
+
+        if square >= 0 and square <= 63:
+            if abs(square % 8 - col) <= 1:
+                updatedPossibleSquares.append(square)
+
+    possibleSquares = updatedPossibleSquares
+
     # check the color of the piece
     if board[row * 8 + col] != board[row * 8 + col].lower():
-        pass
+
+        for square in possibleSquares:
+            if board[square] in "rnbqkp_":
+                if board[square] == "_":
+                    map[square] = "L"
+                else:
+                    map[square] = "T"
 
     else:
-        pass
+
+        for square in possibleSquares:
+            if board[square] in "RNBQKP_":
+                if board[square] == "_":
+                    map[square] = "L"
+                else:
+                    map[square] = "T"
 
     return "".join(map)
 
 def getQueenMap(board, row, col):
-    map = ["I"] * 64
+    rookMap = getRookMap(board, row, col)
+    bishopMap = getBishopMap(board, row, col)
 
-    # check the color of the piece
-    if board[row * 8 + col] != board[row * 8 + col].lower():
-        pass
+    queenMap = ""
 
-    else:
-        pass
+    for i in range(64):
+        if rookMap[i] != "I":
+            queenMap += rookMap[i]
+        elif bishopMap[i] != "I":
+            queenMap += bishopMap[i]
+        else:
+            queenMap += "I"
 
-    return "".join(map)
+    return queenMap
