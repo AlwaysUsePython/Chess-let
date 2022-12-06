@@ -533,7 +533,7 @@ def getKingMap(board, row, col):
                     map[square] = "T"
 
         if row == 0 and col == 4 and board[5] == "_" and board[6] == "_" and board[7] == "r":
-            map[5] = "L"
+            map[6] = "L"
 
         if row == 0 and col == 4 and board[3] == "_" and board[2] == "_" and board[1] == "_" and board[0] == "r":
             map[2] = "L"

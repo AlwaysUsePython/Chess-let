@@ -26,6 +26,14 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+            if event.key == pygame.K_RETURN:
+                board = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR"
+                legalMoves = "I" * 64
+
+                highlights = "_" * 64
+                selected = False
+                flipped = False
+                move = "white"
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
