@@ -112,11 +112,16 @@ def drawSquareNames(screen, flipped):
             screen.blit(text, rect)
 
 ## DRAW THE PIECES ON THE BOARD IN THE RIGHT SQUARES. INPUT IS BOARD AS A STRING ##
-def drawPieces(board, screen):
+def drawPieces(board, screen, flipped):
     pieceCounter = 0
     for piece in board:
+
         col = pieceCounter % 8
         row = pieceCounter // 8
+
+        if flipped:
+            col = 7 - col
+            row = 7 - row
 
         if piece == "P":
             screen.blit(imageDict["WPawn"], (80*col, 80*row))
@@ -181,7 +186,7 @@ def drawBackground(screen):
                 pygame.draw.rect(screen, blackSquareColor, pygame.Rect(row*80, col*80, 80, 80))
 
 ## DRAW HIGHLIGHTS ##
-def drawHighlights(highlights, screen):
+def drawHighlights(highlights, screen, flipped):
     darkLegalMoveColor = (106, 111, 65)
     lightLegalMoveColor = (135, 151, 107)
 
@@ -190,6 +195,10 @@ def drawHighlights(highlights, screen):
     for square in highlights:
         col = squareCounter % 8
         row = squareCounter // 8
+
+        if flipped:
+            col = 7 - col
+            row = 7 - row
 
         if square == "G":
             if (row + col) % 2 == 0:
@@ -200,16 +209,18 @@ def drawHighlights(highlights, screen):
         squareCounter += 1
 
 ## DRAW CHECKS ##
-def drawChecks(board, color, screen):
-    red = (255, 150, 150)
+def drawChecks(board, color, screen, flipped):
+    red = (250, 120, 120)
 
     kingSquare = movement.getKingSquare(color, board)
 
     if movement.isInCheck(color, board):
-        pygame.draw.circle(screen, red, (kingSquare%8 * 80 + 40, kingSquare//8 * 80 + 40), 40)
-
+        if not flipped:
+            pygame.draw.circle(screen, red, (kingSquare%8 * 80 + 40, kingSquare//8 * 80 + 40), 40)
+        else:
+            pygame.draw.circle(screen, red, ((7-(kingSquare%8))*80+40, (7-kingSquare//8)*80+40), 40)
 ## DRAWS LEGAL MOVES ##
-def drawLegalMoves(legalMoves, screen):
+def drawLegalMoves(legalMoves, screen, flipped):
 
     darkLegalMoveColor = (106,111,65)
     lightLegalMoveColor = (135,151,107)
@@ -218,6 +229,10 @@ def drawLegalMoves(legalMoves, screen):
     for square in legalMoves:
         col = squareCounter % 8
         row = squareCounter // 8
+
+        if flipped:
+            col = 7 - col
+            row = 7 - row
 
         if square == "L":
             if (row + col) % 2 == 0:
@@ -235,8 +250,8 @@ def drawLegalMoves(legalMoves, screen):
 ## DRAW EVERYTHING ##
 def drawBoard(board, legalMoves, screen, turn, highlights, flipped):
     drawBackground(screen)
-    drawHighlights(highlights, screen)
-    drawChecks(board, turn, screen)
+    drawHighlights(highlights, screen, flipped)
+    drawChecks(board, turn, screen, flipped)
     drawSquareNames(screen, flipped)
-    drawPieces(board, screen)
-    drawLegalMoves(legalMoves, screen)
+    drawPieces(board, screen, flipped)
+    drawLegalMoves(legalMoves, screen, flipped)

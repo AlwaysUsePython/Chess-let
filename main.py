@@ -14,7 +14,7 @@ legalMoves = "I"*64
 
 highlights = "_"*64
 selected = False
-flipped = True
+flipped = False
 move = "white"
 
 while running:
@@ -36,6 +36,10 @@ while running:
             if pos[0] <= 640:
                 row = pos[1] // 80
                 col = pos[0] // 80
+
+                if flipped:
+                    col = 7 - col
+                    row = 7 - row
 
                 if not selected:
 
