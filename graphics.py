@@ -17,6 +17,9 @@ pygame.init()
 def setup():
 
     # load images
+    FlipButton = pygame.image.load("Chess Pieces/Flip Button.png")
+    imageDict["FlipButton"] = pygame.transform.scale(FlipButton, (50, 50))
+
     BBishop = pygame.image.load("Chess Pieces/Black Bishop.png")
     BKing = pygame.image.load("Chess Pieces/Black King.png")
     BKnight = pygame.image.load("Chess Pieces/Black Knight.png")
@@ -63,30 +66,50 @@ def setup():
     imageDict["mWRook"] = pygame.transform.scale(WRook, (40, 40))
 
 ## DRAW SQUARE COORDINATES ##
-def drawSquareNames(screen):
+def drawSquareNames(screen, flipped):
 
     blackSquareColor = (181,136,99)
     whiteSquareColor = (240,217,182)
 
     font = pygame.font.Font("freesansbold.ttf", 10)
 
-    for i in range(8, 0, -1):
-        if i % 2 == 0:
-            text = font.render(str(i), True, blackSquareColor)
-        else:
-            text = font.render(str(i), True, whiteSquareColor)
-        rect = text.get_rect()
-        rect.center = (5, 80*(8-i) + 5)
-        screen.blit(text, rect)
-    letters = "abcdefgh"
-    for i in range(8):
-        if i % 2 == 1:
-            text = font.render(letters[i], True, blackSquareColor)
-        else:
-            text = font.render(letters[i], True, whiteSquareColor)
-        rect = text.get_rect()
-        rect.center = (80*i + 75, 635)
-        screen.blit(text, rect)
+    if not flipped:
+        for i in range(8, 0, -1):
+            if i % 2 == 0:
+                text = font.render(str(i), True, blackSquareColor)
+            else:
+                text = font.render(str(i), True, whiteSquareColor)
+            rect = text.get_rect()
+            rect.center = (5, 80*(8-i) + 5)
+            screen.blit(text, rect)
+        letters = "abcdefgh"
+        for i in range(8):
+            if i % 2 == 1:
+                text = font.render(letters[i], True, blackSquareColor)
+            else:
+                text = font.render(letters[i], True, whiteSquareColor)
+            rect = text.get_rect()
+            rect.center = (80*i + 75, 635)
+            screen.blit(text, rect)
+
+    else:
+        for i in range(0, 8):
+            if i % 2 == 0:
+                text = font.render(str(i+1), True, blackSquareColor)
+            else:
+                text = font.render(str(i+1), True, whiteSquareColor)
+            rect = text.get_rect()
+            rect.center = (5, 80*(i) + 5)
+            screen.blit(text, rect)
+        letters = "abcdefgh"
+        for i in range(8):
+            if i % 2 == 1:
+                text = font.render(letters[7-i], True, blackSquareColor)
+            else:
+                text = font.render(letters[7-i], True, whiteSquareColor)
+            rect = text.get_rect()
+            rect.center = (80*i + 75, 635)
+            screen.blit(text, rect)
 
 ## DRAW THE PIECES ON THE BOARD IN THE RIGHT SQUARES. INPUT IS BOARD AS A STRING ##
 def drawPieces(board, screen):
@@ -130,6 +153,7 @@ def drawBackground(screen):
 
     pygame.draw.rect(screen, darkGray, pygame.Rect(640, 0, 360, 640))
     pygame.draw.rect(screen, mediumGray, pygame.Rect(640, 0, 360, 50))
+    screen.blit(imageDict["FlipButton"], (950, 590))
 
 
     # Colors in the black squares
@@ -209,10 +233,10 @@ def drawLegalMoves(legalMoves, screen):
         squareCounter += 1
 
 ## DRAW EVERYTHING ##
-def drawBoard(board, legalMoves, screen, turn, highlights = "_"*64):
+def drawBoard(board, legalMoves, screen, turn, highlights, flipped):
     drawBackground(screen)
     drawHighlights(highlights, screen)
     drawChecks(board, turn, screen)
-    drawSquareNames(screen)
+    drawSquareNames(screen, flipped)
     drawPieces(board, screen)
     drawLegalMoves(legalMoves, screen)

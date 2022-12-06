@@ -14,6 +14,7 @@ legalMoves = "I"*64
 
 highlights = "_"*64
 selected = False
+flipped = True
 move = "white"
 
 while running:
@@ -28,6 +29,9 @@ while running:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
+
+            if pos[0] >= 950 and pos[1] >= 590:
+                flipped = not flipped
 
             if pos[0] <= 640:
                 row = pos[1] // 80
@@ -64,5 +68,5 @@ while running:
                     selected = False
 
 
-    graphics.drawBoard(board, legalMoves, screen, move, highlights)
+    graphics.drawBoard(board, legalMoves, screen, move, highlights, flipped)
     pygame.display.update()
