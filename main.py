@@ -49,6 +49,9 @@ while running:
             if event.key == pygame.K_UP:
                 gameState = gameState.getHead()
 
+            if event.key == pygame.K_DOWN:
+                gameState = gameState.getTail()
+                
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
 
