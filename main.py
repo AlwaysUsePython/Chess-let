@@ -2,6 +2,7 @@ import graphics
 import movement
 import pygame
 import lines
+import time
 
 graphics.setup()
 
@@ -16,6 +17,9 @@ legalMoves = "I"*64
 highlights = "_"*64
 selected = False
 flipped = False
+
+database = lines.MoveDatabase("Queen's Gambit")
+computerColor = "black"
 
 while running:
 
@@ -80,6 +84,7 @@ while running:
                 elif selected:
                     if legalMoves[row*8+col] != "I":
                         newBoard = movement.makeMove(gameState.board, highlights.index("G"), row*8+col)
+                        print(highlights.index("G"), row*8+col)
                         if gameState.move == "white":
                             newState = lines.GameState(newBoard, "black", gameState)
                             gameState.setNext(newState)
@@ -88,6 +93,8 @@ while running:
                             newState = lines.GameState(newBoard, "white", gameState)
                             gameState.setNext(newState)
                             gameState = newState
+
+                        print("BEST MOVES FOR", gameState.move.upper() + ":", database.getMoves(gameState))
 
                     highlights = "_"*64
                     legalMoves = "I"*64
