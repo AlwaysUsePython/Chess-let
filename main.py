@@ -1,12 +1,13 @@
 import graphics
 import movement
 import pygame
+import lines
 
 graphics.setup()
 
 running = True
 
-board = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR"
+gameState = lines.GameState("rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR")
 
 screen = pygame.display.set_mode((1000, 640))
 
@@ -15,7 +16,6 @@ legalMoves = "I"*64
 highlights = "_"*64
 selected = False
 flipped = False
-move = "white"
 
 while running:
 
@@ -27,13 +27,23 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
             if event.key == pygame.K_RETURN:
-                board = "rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR"
+                gameState = lines.GameState("rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR")
                 legalMoves = "I" * 64
 
                 highlights = "_" * 64
                 selected = False
                 flipped = False
-                move = "white"
+
+            if event.key == pygame.K_LEFT:
+                if gameState.prev != None:
+                    gameState = gameState.prev
+
+            if event.key == pygame.K_RIGHT:
+                if gameState.next != None:
+                    gameState = gameState.next
+
+            if event.key == pygame.K_UP:
+                gameState = gameState.getHead()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
@@ -51,13 +61,13 @@ while running:
 
                 if not selected:
 
-                    if move == "black":
+                    if gameState.move == "black":
                         goodPieces = "rnbqkp"
                     else:
                         goodPieces = "RNBQKP"
 
-                    if board[row*8+col] in goodPieces:
-                        legalMoves = movement.getLegalMoves(board, row, col)
+                    if gameState.board[row*8+col] in goodPieces:
+                        legalMoves = movement.getLegalMoves(gameState.board, row, col)
                         highlights = ["_"]*64
                         highlights[row*8+col] = "G"
                         highlights = "".join(highlights)
@@ -69,16 +79,20 @@ while running:
 
                 elif selected:
                     if legalMoves[row*8+col] != "I":
-                        board = movement.makeMove(board, highlights.index("G"), row*8+col)
-                        if move == "white":
-                            move = "black"
+                        newBoard = movement.makeMove(gameState.board, highlights.index("G"), row*8+col)
+                        if gameState.move == "white":
+                            newState = lines.GameState(newBoard, "black", gameState)
+                            gameState.setNext(newState)
+                            gameState = newState
                         else:
-                            move = "white"
+                            newState = lines.GameState(newBoard, "white", gameState)
+                            gameState.setNext(newState)
+                            gameState = newState
 
                     highlights = "_"*64
                     legalMoves = "I"*64
                     selected = False
 
 
-    graphics.drawBoard(board, legalMoves, screen, move, highlights, flipped)
+    graphics.drawBoard(gameState.board, legalMoves, screen, gameState.move, highlights, flipped)
     pygame.display.update()
