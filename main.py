@@ -97,8 +97,10 @@ while running:
                             gameState.setNext(newState)
                             gameState = newState
 
-                        print("BEST MOVES FOR", gameState.move.upper() + ":", database.getMoves(gameState))
-
+                        try:
+                            print("BEST MOVES FOR", gameState.move.upper() + ":", database.getMoves(gameState))
+                        except:
+                            print("This is not part of the database")
                     highlights = "_"*64
                     legalMoves = "I"*64
                     selected = False
