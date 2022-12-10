@@ -19,6 +19,10 @@ def setup():
     # load images
     FlipButton = pygame.image.load("Chess Pieces/Flip Button.png")
     imageDict["FlipButton"] = pygame.transform.scale(FlipButton, (50, 50))
+    Correct = pygame.image.load("Chess Pieces/Correct.png")
+    imageDict["Correct"] = pygame.transform.scale(Correct, (280, (257/917)*280))
+    Hint = pygame.image.load("Chess Pieces/Incorrect.png")
+    imageDict["Incorrect"] = pygame.transform.scale(Hint, (280, int((212/973)*280)))
 
     BBishop = pygame.image.load("Chess Pieces/Black Bishop.png")
     BKing = pygame.image.load("Chess Pieces/Black King.png")
@@ -150,14 +154,22 @@ def drawPieces(board, screen, flipped):
         pieceCounter += 1
 
 ## DRAW THE BOARD IN THE BACKGROUND ##
-def drawBackground(screen):
+def drawBackground(screen, correct=None):
 
     # Dark Gray Window
     mediumGray = (55, 52, 49)
     darkGray = (38, 36, 33)
+    buttonGray = (46, 44, 41)
 
     pygame.draw.rect(screen, darkGray, pygame.Rect(640, 0, 360, 640))
     pygame.draw.rect(screen, mediumGray, pygame.Rect(640, 0, 360, 50))
+    if correct == None:
+        pass
+    elif correct:
+        screen.blit(imageDict["Correct"], (680, 320-((257/917)*140)))
+    elif not correct:
+        screen.blit(imageDict["Incorrect"], (680, 320-(int((212/973)*140))))
+
     screen.blit(imageDict["FlipButton"], (950, 590))
 
 
@@ -248,8 +260,8 @@ def drawLegalMoves(legalMoves, screen, flipped):
         squareCounter += 1
 
 ## DRAW EVERYTHING ##
-def drawBoard(board, legalMoves, screen, turn, highlights, flipped):
-    drawBackground(screen)
+def drawBoard(board, legalMoves, screen, turn, highlights, flipped, correct=None):
+    drawBackground(screen, correct)
     drawHighlights(highlights, screen, flipped)
     drawChecks(board, turn, screen, flipped)
     drawSquareNames(screen, flipped)

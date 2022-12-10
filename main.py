@@ -3,6 +3,7 @@ import movement
 import pygame
 import lines
 import time
+import random
 
 graphics.setup()
 
@@ -20,6 +21,7 @@ flipped = False
 
 database = lines.MoveDatabase("Queen's Gambit")
 computerColor = "black"
+correct = None
 
 while running:
 
@@ -98,13 +100,52 @@ while running:
                             gameState = newState
 
                         try:
-                            print("BEST MOVES FOR", gameState.move.upper() + ":", database.getMoves(gameState))
+                            bestMoves = database.getMoves(gameState.prev)
+                            print("move:", [highlights.index("G"), row*8+col])
+                            print(bestMoves)
+                            found = False
+                            for move in bestMoves:
+                                if int(move[0]) == highlights.index("G") and int(move[1]) == row*8+col:
+                                    found = True
+
+                            if found:
+                                correct = True
+                            else:
+                                correct = False
+
+                            try:
+                                newBestMoves = database.getMoves(gameState)
+
+                                print("BEST MOVES FOR", gameState.move.upper() + ":", newBestMoves)
+
+                                if gameState.move == computerColor:
+
+                                    chosenMove = newBestMoves[random.randint(0, len(newBestMoves)-1)]
+
+                                    newBoard = movement.makeMove(gameState.board, int(chosenMove[0]), int(chosenMove[1]))
+                                    print(highlights.index("G"), row * 8 + col)
+                                    if gameState.move == "white":
+                                        newState = lines.GameState(newBoard, "black", gameState)
+                                        gameState.setNext(newState)
+                                        gameState = newState
+                                    else:
+                                        newState = lines.GameState(newBoard, "white", gameState)
+                                        gameState.setNext(newState)
+                                        gameState = newState
+
+                            except Exception as e:
+                                print(e)
+                                if correct == True:
+                                    print("END OF LINE")
+
                         except:
                             print("This is not part of the database")
+                            correct = None
+                        print(correct)
                     highlights = "_"*64
                     legalMoves = "I"*64
                     selected = False
 
 
-    graphics.drawBoard(gameState.board, legalMoves, screen, gameState.move, highlights, flipped)
+    graphics.drawBoard(gameState.board, legalMoves, screen, gameState.move, highlights, flipped, correct)
     pygame.display.update()
