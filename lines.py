@@ -53,8 +53,8 @@ class MoveDatabase:
 
             while currentMove != "end\n" and currentMove != "end":
 
-                loc1 = int(currentMove[0] + currentMove[1])
-                loc2 = int(currentMove[3] + currentMove[4])
+                loc1 = int(currentMove[0:currentMove.index(" ")])
+                loc2 = int(currentMove[currentMove.index(" ")+1:])
 
                 newBoard = movement.makeMove(currentGS.board, loc1, loc2)
 

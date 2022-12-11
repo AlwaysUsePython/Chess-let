@@ -19,9 +19,24 @@ highlights = "_"*64
 selected = False
 flipped = False
 
-database = lines.MoveDatabase("Queen's Gambit")
-computerColor = "black"
+database = lines.MoveDatabase("testing.txt")
+computerColor = "white"
 correct = None
+
+newBestMoves = database.getMoves(gameState)
+
+if computerColor == "white":
+    chosenMove = newBestMoves[random.randint(0, len(newBestMoves) - 1)]
+
+    newBoard = movement.makeMove(gameState.board, int(chosenMove[0]), int(chosenMove[1]))
+    if gameState.move == "white":
+        newState = lines.GameState(newBoard, "black", gameState)
+        gameState.setNext(newState)
+        gameState = newState
+    else:
+        newState = lines.GameState(newBoard, "white", gameState)
+        gameState.setNext(newState)
+        gameState = newState
 
 while running:
 
