@@ -2,8 +2,6 @@ import graphics
 import movement
 import pygame
 import lines
-import time
-import random
 
 graphics.setup()
 
@@ -19,8 +17,16 @@ highlights = "_" * 64
 selected = False
 flipped = False
 
-file = open("testing.txt", "w")
+file = open("G6 Modern.txt", "w")
 
+def removeLast(list):
+    newList = []
+    for i in range(len(list)-1):
+        newList.append(list[i])
+    return newList
+
+startingNew = False
+movesStr = []
 
 while running:
 
@@ -37,21 +43,21 @@ while running:
 
                 highlights = "_" * 64
                 selected = False
-                flipped = False
 
             if event.key == pygame.K_LEFT:
                 if gameState.prev != None:
                     gameState = gameState.prev
-
-            if event.key == pygame.K_RIGHT:
-                if gameState.next != None:
-                    gameState = gameState.next
+                    movesStr = removeLast(movesStr)
+                    if not startingNew:
+                        file.write("end")
+                        file.write("\n")
+                        startingNew = True
 
             if event.key == pygame.K_UP:
                 gameState = gameState.getHead()
-
-            if event.key == pygame.K_DOWN:
-                gameState = gameState.getTail()
+                movesStr = []
+                file.write("end")
+                file.write("\n")
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
@@ -88,8 +94,16 @@ while running:
                 elif selected:
                     if legalMoves[row * 8 + col] != "I":
                         newBoard = movement.makeMove(gameState.board, highlights.index("G"), row * 8 + col)
+
+                        if startingNew:
+                            startingNew = False
+                            for item in movesStr:
+                                file.write(item)
+                                file.write("\n")
+
                         file.write(str(highlights.index("G")) + " " + str(row*8+col))
                         file.write("\n")
+                        movesStr.append(str(highlights.index("G")) + " " + str(row*8+col))
                         print(highlights.index("G"), row * 8 + col)
                         if gameState.move == "white":
                             newState = lines.GameState(newBoard, "black", gameState)

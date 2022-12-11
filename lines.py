@@ -61,8 +61,7 @@ class MoveDatabase:
                 newGS = GameState(newBoard, currentGS.getNextMove(), currentGS)
 
                 try:
-                    if [loc1, loc2] not in self.moves[currentGS.toString()]:
-                        self.moves[currentGS.toString()].append([loc1, loc2])
+                    self.moves[currentGS.toString()].append([loc1, loc2])
                 except:
                     self.moves[currentGS.toString()] = [[loc1, loc2]]
 

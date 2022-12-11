@@ -19,9 +19,22 @@ highlights = "_"*64
 selected = False
 flipped = False
 
-database = lines.MoveDatabase("testing.txt")
-computerColor = "white"
+opening = "G6 Modern"
+
+database = lines.MoveDatabase(opening + ".txt")
+
+if opening in ["G6 Modern"]:
+    computerColor = "white"
+
+else:
+    computerColor = "black"
+
 correct = None
+
+if computerColor == "white":
+    flipped = True
+else:
+    flipped = False
 
 newBestMoves = database.getMoves(gameState)
 
@@ -53,7 +66,21 @@ while running:
 
                 highlights = "_" * 64
                 selected = False
-                flipped = False
+
+                newBestMoves = database.getMoves(gameState)
+
+                if computerColor == "white":
+                    chosenMove = newBestMoves[random.randint(0, len(newBestMoves) - 1)]
+
+                    newBoard = movement.makeMove(gameState.board, int(chosenMove[0]), int(chosenMove[1]))
+                    if gameState.move == "white":
+                        newState = lines.GameState(newBoard, "black", gameState)
+                        gameState.setNext(newState)
+                        gameState = newState
+                    else:
+                        newState = lines.GameState(newBoard, "white", gameState)
+                        gameState.setNext(newState)
+                        gameState = newState
 
             if event.key == pygame.K_LEFT:
                 if gameState.prev != None:
