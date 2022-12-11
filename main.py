@@ -19,6 +19,7 @@ legalMoves = "I"*64
 highlights = "_"*64
 selected = False
 flipped = False
+streak = 0
 
 database = lines.MoveDatabase(opening)
 
@@ -49,6 +50,7 @@ if computerColor == "white":
         newState = lines.GameState(newBoard, "white", gameState)
         gameState.setNext(newState)
         gameState = newState
+
 
 while running:
 
@@ -101,6 +103,29 @@ while running:
             if pos[0] >= 950 and pos[1] >= 590:
                 flipped = not flipped
 
+            elif pos[0] >= 640 and pos[0] <= (780) and pos[1] >= 580:
+                for i in range(2):
+                    try:
+                        streak = 0
+                        newBestMoves = database.getMoves(gameState)
+
+                        chosenMove = newBestMoves[random.randint(0, len(newBestMoves) - 1)]
+
+                        newBoard = movement.makeMove(gameState.board, int(chosenMove[0]), int(chosenMove[1]))
+                        if gameState.move == "white":
+                            newState = lines.GameState(newBoard, "black", gameState)
+                            gameState.setNext(newState)
+                            gameState = newState
+                        else:
+                            newState = lines.GameState(newBoard, "white", gameState)
+                            gameState.setNext(newState)
+                            gameState = newState
+
+                    except:
+                        pass
+
+
+
             if pos[0] <= 640:
                 row = pos[1] // 80
                 col = pos[0] // 80
@@ -151,8 +176,10 @@ while running:
 
                             if found:
                                 correct = True
+                                streak += 1
                             else:
                                 correct = False
+                                streak = 0
 
                             try:
                                 newBestMoves = database.getMoves(gameState)
@@ -188,5 +215,5 @@ while running:
                     selected = False
 
 
-    graphics.drawBoard(gameState.board, legalMoves, screen, gameState.move, highlights, flipped, correct)
+    graphics.drawBoard(gameState.board, legalMoves, screen, gameState.move, highlights, flipped, correct, streak, opening[0:len(opening)-4])
     pygame.display.update()

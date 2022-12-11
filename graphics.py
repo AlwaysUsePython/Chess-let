@@ -23,6 +23,11 @@ def setup():
     imageDict["Correct"] = pygame.transform.scale(Correct, (280, (257/917)*280))
     Hint = pygame.image.load("Chess Pieces/Incorrect.png")
     imageDict["Incorrect"] = pygame.transform.scale(Hint, (280, int((212/973)*280)))
+    Show = pygame.image.load("Chess Pieces/Show.png")
+    imageDict["Show"] = pygame.transform.scale(Show, (140, int((300/822)*140)))
+    Streak = pygame.image.load("Chess Pieces/Streak.png")
+    imageDict["Streak"] = pygame.transform.scale(Streak, (50, int(50*(698/391))))
+
 
     BBishop = pygame.image.load("Chess Pieces/Black Bishop.png")
     BKing = pygame.image.load("Chess Pieces/Black King.png")
@@ -154,15 +159,23 @@ def drawPieces(board, screen, flipped):
         pieceCounter += 1
 
 ## DRAW THE BOARD IN THE BACKGROUND ##
-def drawBackground(screen, correct=None):
+def drawBackground(screen, correct=None, streak=0, opening="Opening"):
+
+    font = pygame.font.Font("freesansbold.ttf", 30)
 
     # Dark Gray Window
     mediumGray = (55, 52, 49)
     darkGray = (38, 36, 33)
-    buttonGray = (46, 44, 41)
 
     pygame.draw.rect(screen, darkGray, pygame.Rect(640, 0, 360, 640))
-    pygame.draw.rect(screen, mediumGray, pygame.Rect(640, 0, 360, 50))
+    pygame.draw.rect(screen, mediumGray, pygame.Rect(640, 0, 360, 70))
+
+
+    text = font.render(opening, True, (200, 200, 200))
+    textRect = text.get_rect()
+    textRect.center = (820, 35)
+    screen.blit(text, textRect)
+
     if correct == None:
         pass
     elif correct:
@@ -170,7 +183,16 @@ def drawBackground(screen, correct=None):
     elif not correct:
         screen.blit(imageDict["Incorrect"], (680, 320-(int((212/973)*140))))
 
+    screen.blit(imageDict["Show"], (640, 615-(int((300/822)*70))))
+
+    screen.blit(imageDict["Streak"], (770, 80))#630-int(50*(698/391))))
+
     screen.blit(imageDict["FlipButton"], (950, 590))
+
+    text = font.render(" " + str(streak), True, (200, 200, 200))
+    textRect = text.get_rect()
+    textRect.center = (840, 60 + int(50*(698/391)))
+    screen.blit(text, textRect)
 
 
     # Colors in the black squares
@@ -260,8 +282,8 @@ def drawLegalMoves(legalMoves, screen, flipped):
         squareCounter += 1
 
 ## DRAW EVERYTHING ##
-def drawBoard(board, legalMoves, screen, turn, highlights, flipped, correct=None):
-    drawBackground(screen, correct)
+def drawBoard(board, legalMoves, screen, turn, highlights, flipped, correct=None, streak=0, opening="Opening"):
+    drawBackground(screen, correct, streak, opening)
     drawHighlights(highlights, screen, flipped)
     drawChecks(board, turn, screen, flipped)
     drawSquareNames(screen, flipped)
