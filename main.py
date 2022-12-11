@@ -22,7 +22,7 @@ flipped = False
 
 database = lines.MoveDatabase(opening)
 
-if opening in ["G6 Modern"]:
+if opening in ["G6 Modern.txt"]:
     computerColor = "white"
 
 else:
