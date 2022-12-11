@@ -2,8 +2,9 @@ import graphics
 import movement
 import pygame
 import lines
-import time
 import random
+
+opening = "G6 Modern.txt"
 
 graphics.setup()
 
@@ -19,9 +20,7 @@ highlights = "_"*64
 selected = False
 flipped = False
 
-opening = "G6 Modern"
-
-database = lines.MoveDatabase(opening + ".txt")
+database = lines.MoveDatabase(opening)
 
 if opening in ["G6 Modern"]:
     computerColor = "white"

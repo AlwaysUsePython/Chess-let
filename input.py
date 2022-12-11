@@ -3,6 +3,9 @@ import movement
 import pygame
 import lines
 
+# THIS IS THE FILE YOU WILL BE EDITING
+file = open("G6 Modern.txt", "w")
+
 graphics.setup()
 
 running = True
@@ -16,8 +19,6 @@ legalMoves = "I" * 64
 highlights = "_" * 64
 selected = False
 flipped = False
-
-file = open("G6 Modern.txt", "w")
 
 def removeLast(list):
     newList = []
