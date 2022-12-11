@@ -4,7 +4,7 @@ import pygame
 import lines
 import random
 
-opening = "G6 Modern.txt"
+opening = "Black Gambits.txt"
 
 graphics.setup()
 
@@ -23,7 +23,7 @@ streak = 0
 
 database = lines.MoveDatabase(opening)
 
-if opening in ["G6 Modern.txt"]:
+if opening in ["G6 Modern.txt", "Black Gambits.txt"]:
     computerColor = "white"
 
 else:

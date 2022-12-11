@@ -4,7 +4,7 @@ import pygame
 import lines
 
 # THIS IS THE FILE YOU WILL BE EDITING
-file = open("G6 Modern.txt", "w")
+file = open("", "w")
 
 graphics.setup()
 
